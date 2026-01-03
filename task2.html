@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Inspiration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+    .app {
+      background: rgba(0,0,0,0.2);
+      padding: 20px;
+      border-radius: 10px;
+      width: 350px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 15px;
+    }
+    .quote {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 8px 12px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn {
+      background: #fff;
+      color: #333;
+    }
+    .btn:hover {
+      opacity: 0.8;
+    }
+    .favorites {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <h1>🌟 Daily Inspiration</h1>
+  <div class="quote" id="quoteText"></div>
+
+  <button class="btn" onclick="newQuote()">New Quote</button>
+  <button class="btn" onclick="saveFavorite()">❤️ Favorite</button>
+  <button class="btn" onclick="shareQuote()">📤 Share</button>
+
+  <div class="favorites" id="favCount"></div>
+</div>
+
+<script>
+  const quotes = [
+    "Believe in yourself and all that you are.",
+    "Every day is a second chance.",
+    "Dream big. Work hard. Stay focused.",
+    "Success begins with self-discipline.",
+    "Your future depends on what you do today."
+  ];
+
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  let currentQuote = "";
+
+  function newQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    currentQuote = quotes[randomIndex];
+    document.getElementById("quoteText").innerText = currentQuote;
+  }
+
+  function saveFavorite() {
+    if (!favorites.includes(currentQuote)) {
+      favorites.push(currentQuote);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      updateFavCount();
+      alert("Quote saved to favorites!");
+    }
+  }
+
+  function shareQuote() {
+    if (navigator.share) {
+      navigator.share({
+        text: currentQuote
+      });
+    } else {
+      alert("Sharing not supported on this browser.");
+    }
+  }
+
+  function updateFavCount() {
+    document.getElementById("favCount").innerText =
+      "❤️ Favorites saved: " + favorites.length;
+  }
+
+  // Load quote on app launch
+  newQuote();
+  updateFavCount();
+</script>
+
+</body>
+</html>
